@@ -1,4 +1,5 @@
-package com.example.salle.ui;
+package com.example.salle.ui
 
-public class SalleUiState {
-}
+data class SalleUiState(
+    val isShowingRoutinesPage: Boolean = true
+)
