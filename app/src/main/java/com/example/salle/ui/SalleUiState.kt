@@ -1,5 +1,7 @@
 package com.example.salle.ui
 
+import com.example.salle.data.Pages
+
 data class SalleUiState(
-    val isShowingRoutinesPage: Boolean = true
+    val currentpage: Pages = Pages.Routines,
 )

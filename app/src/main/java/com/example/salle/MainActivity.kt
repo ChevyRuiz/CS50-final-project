@@ -22,7 +22,6 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.example.salle.ui.RoutinesNavGraph
 import com.example.salle.ui.SalleApp
 import com.example.salle.ui.theme.AppTheme
 
@@ -35,7 +34,7 @@ class MainActivity : ComponentActivity() {
                 Surface (
                     modifier = Modifier.fillMaxSize()
                 ) {
-                    RoutinesNavGraph(navController = rememberNavController())
+                    SalleApp()
                 }
             }
         }
