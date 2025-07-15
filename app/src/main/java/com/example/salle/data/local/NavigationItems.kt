@@ -3,9 +3,6 @@ package com.example.salle.data.local
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.ui.graphics.BlendMode.Companion.Screen
-import com.example.salle.data.NavigationItem
-import com.example.salle.data.Pages
 
 val navigationItems = listOf(
     NavigationItem(

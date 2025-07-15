@@ -1,4 +1,4 @@
-package com.example.salle.ui
+package com.example.salle.ui.navigation
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -7,9 +7,11 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
-import androidx.navigation.compose.rememberNavController
-import com.example.salle.data.NestedGraph
-import com.example.salle.data.Pages
+import com.example.salle.data.local.NestedGraph
+import com.example.salle.data.local.Pages
+import com.example.salle.ui.activity.ActivityScreen
+import com.example.salle.ui.routine.AddRoutineScreen
+import com.example.salle.ui.routine.RoutineScreen
 
 
 @Composable
@@ -28,7 +30,6 @@ fun SalleNavGraph(
         ){
             composable(route = Pages.Routines.name){
                 RoutineScreen(
-                    onButtonClick = { navController.navigate(Pages.AddRoutines.name)},
                     modifier = Modifier.fillMaxSize()
                 )
             }

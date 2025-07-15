@@ -6,38 +6,55 @@ import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.salle.data.Pages
+import com.example.salle.data.local.Pages
+import com.example.salle.ui.navigation.SalleNavGraph
 
 @Composable
 fun SalleApp(
-    viewModel: SalleViewModel = viewModel(),
+    // viewModel: SalleViewModel = viewModel(),
     navController: NavHostController = rememberNavController()
 ) {
-    val salleUiState by viewModel.uiState.collectAsState()
+    // val salleUiState by viewModel.uiState.collectAsState()
     val layoutDirection = LocalLayoutDirection.current
     Scaffold(
         bottomBar = {
                 BottomBar(
                     navController = navController
                 )
+        },
+        floatingActionButton = {
+            if ((navController.currentBackStackEntryAsState().value?.destination?.route
+                    ?: Pages.Routines.name) == Pages.Routines.name
+            ) {
+                FloatingActionButton(
+                    onClick = { navController.navigate(Pages.AddRoutines.name) },
+                    shape = MaterialTheme.shapes.medium,
+                    modifier = Modifier.padding(20.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = "Add Routine"
+                    )
+                }
+            }
         },
         modifier = Modifier
             .padding(
@@ -60,8 +77,6 @@ fun BottomBar(
     modifier: Modifier = Modifier,
     navController: NavHostController
 ) {
-    val startDestination = Pages.Routines
-    var selectedDestination by rememberSaveable { mutableIntStateOf(startDestination.ordinal) }
 
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentScreen = Pages.valueOf(
@@ -77,10 +92,9 @@ fun BottomBar(
 
                 if(destination.icon != null) {
                     NavigationBarItem(
-                        selected = selectedDestination == index,
+                        selected = currentScreen.name == destination.name,
                         onClick = {
                             navController.navigate(route = destination.name)
-                            selectedDestination = index
                         },
                         icon = {
                             Icon(

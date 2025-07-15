@@ -1,4 +1,4 @@
-package com.example.salle.data
+package com.example.salle.data.local
 
 import androidx.compose.ui.graphics.vector.ImageVector
 
