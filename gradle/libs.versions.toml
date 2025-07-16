@@ -1,23 +1,27 @@
 [versions]
-agp = "8.9.2"
-kotlin = "2.0.21"
+agp = "8.11.1"
+kotlin = "2.2.0"
 coreKtx = "1.16.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 lifecycleRuntimeKtx = "2.9.1"
 activityCompose = "1.10.1"
-composeBom = "2024.09.00"
-roomRuntime = "2.6.0"
+composeBom = "2025.06.01"
+roomRuntime = "2.7.2"
 uiTextGoogleFonts = "1.8.3"
-navigationRuntimeAndroid = "2.9.0"
-navigationRuntimeJvmstubs = "2.9.0"
-navigationComposeJvmstubs = "2.9.0"
-navigationComposeAndroid = "2.9.0"
+navigationRuntimeAndroid = "2.9.1"
+navigationRuntimeJvmstubs = "2.9.1"
+navigationComposeJvmstubs = "2.9.1"
+navigationComposeAndroid = "2.9.1"
 navigationRuntimeAndroidVersion = "2.9.1"
-navigationComposeJvmstubsVersion = "2.9.1"
+ksp = "2.2.0-2.0.2"
+room = "2.7.2"
 
 [libraries]
+room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
+room-compiler-ksp = { module = "androidx.room:room-compiler", version.ref = "room" }
 lifecycle-viewmodel-compose = "androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0"
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomRuntime" }
@@ -47,4 +51,6 @@ navigation-compose = "androidx.navigation:navigation-compose:2.7.7"
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+
 
