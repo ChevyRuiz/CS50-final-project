@@ -6,6 +6,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.salle.SalleApplication
 import com.example.salle.ui.routine.AddRoutineViewModel
+import com.example.salle.ui.routine.RoutineHomeScreenViewModel
 
 object AppViewModelProvider {
     val Factory = viewModelFactory {
@@ -13,6 +14,12 @@ object AppViewModelProvider {
             AddRoutineViewModel(
                 routinesRepository = salleApplication().container.routinesRepository,
                 exercisesRepository = salleApplication().container.exercisesRepository
+            )
+        }
+
+        initializer {
+            RoutineHomeScreenViewModel(
+                routinesWithExercisesRepository = salleApplication().container.routinesWithExercisesRepository
             )
         }
     }

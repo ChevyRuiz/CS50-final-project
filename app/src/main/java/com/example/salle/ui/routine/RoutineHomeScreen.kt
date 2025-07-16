@@ -23,19 +23,27 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.salle.R
-import com.example.salle.data.model.Exercise
 import com.example.salle.data.model.Routine
 import com.example.salle.ui.theme.AppTheme
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.FilledTonalButton
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.salle.data.model.RoutineWithExercises
+import com.example.salle.ui.AppViewModelProvider
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RoutineScreen(
+    viewModel: RoutineHomeScreenViewModel = viewModel(factory = AppViewModelProvider.Factory),
     modifier: Modifier = Modifier
 ) {
+
+    val routineHomeUiState by viewModel.routineHomeScreenUiState.collectAsState()
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -50,7 +58,7 @@ fun RoutineScreen(
         modifier = modifier
     ) { innerPadding ->
         RoutineScreenBody(
-            routineList = listOf(),
+            routinesWithExercisesList = routineHomeUiState.routinesWithExercisesList,
             onEditClick = {},
             onDeleteClick = {},
             contentPadding = innerPadding,
@@ -61,7 +69,7 @@ fun RoutineScreen(
 
 @Composable
 fun RoutineScreenBody(
-    routineList: List<Routine>,
+    routinesWithExercisesList: List<RoutineWithExercises>,
     onEditClick: (Routine) -> Unit,
     onDeleteClick: (Routine) -> Unit,
     modifier: Modifier = Modifier,
@@ -72,7 +80,7 @@ fun RoutineScreenBody(
         verticalArrangement = Arrangement.Center,
         modifier = modifier,
     ) {
-        if (routineList.isEmpty()) {
+        if (routinesWithExercisesList.isEmpty()) {
             Text(
                 text = "No routines",
                 textAlign = TextAlign.Center,
@@ -81,7 +89,7 @@ fun RoutineScreenBody(
             )
         } else {
             RoutineList(
-                routineList = routineList,
+                routinesWithExercises = routinesWithExercisesList,
                 onEditClick = onEditClick,
                 onDeleteClick = onDeleteClick,
                 contentPadding = contentPadding,
@@ -93,7 +101,7 @@ fun RoutineScreenBody(
 
 @Composable
 fun RoutineList(
-    routineList: List<Routine>,
+    routinesWithExercises: List<RoutineWithExercises>,
     onEditClick: (Routine) -> Unit,
     onDeleteClick: (Routine) -> Unit,
     contentPadding: PaddingValues,
@@ -103,9 +111,9 @@ fun RoutineList(
         modifier = modifier,
         contentPadding = contentPadding
     ) {
-        items(items = routineList, key = { it.id }) { routine ->
-            RoutineItem(
-                routine = routine,
+        items(items = routinesWithExercises, key = { it.routine.id }) { routineWithExercises ->
+            RoutineWithExercisesItem(
+                routineWithExercises = routineWithExercises,
                 modifier = Modifier
                     .padding(dimensionResource(id = R.dimen.padding_small)),
                 onEditClick = { onEditClick },
@@ -116,8 +124,8 @@ fun RoutineList(
 }
 
 @Composable
-fun RoutineItem(
-    routine: Routine,
+fun RoutineWithExercisesItem(
+    routineWithExercises: RoutineWithExercises,
     onEditClick: (Routine) -> Unit,
     onDeleteClick: (Routine) -> Unit,
     modifier: Modifier = Modifier
@@ -131,9 +139,10 @@ fun RoutineItem(
             verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.padding_small))
         ) {
             Text(
-                text = routine.name,
+                text = routineWithExercises.routine.name,
                 style = MaterialTheme.typography.titleLarge
             )
+
             Row(
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -159,34 +168,37 @@ fun RoutineItem(
                     modifier = Modifier.weight(1f)
                 )
             }
+
+            routineWithExercises.exercises.forEach {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-//                    Text(
-//                        text = it.name,
-//                        style = MaterialTheme.typography.bodyMedium,
-//                        modifier = Modifier.weight(2f)
-//                    )
-//                    Spacer(Modifier.weight(1f))
-//                    Text(
-//                        text = it.sets.toString(),
-//                        textAlign = TextAlign.Center,
-//                        modifier = Modifier.weight(1f)
-//                    )
-//                    Spacer(Modifier.weight(0.2f))
-//                    Text(
-//                        text = it.reps.toString(),
-//                        textAlign = TextAlign.Center,
-//                        modifier = Modifier.weight(1f)
-//                    )
-//                    Spacer(Modifier.weight(0.2f))
-//                    Text(
-//                        text = it.weight.toString(),
-//                        textAlign = TextAlign.Center,
-//                        modifier = Modifier.weight(1f)
-//                    )
+                    Text(
+                        text = it.name,
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier.weight(2f)
+                    )
+                    Spacer(Modifier.weight(1f))
+                    Text(
+                        text = it.sets.toString(),
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.weight(1f)
+                    )
+                    Spacer(Modifier.weight(0.2f))
+                    Text(
+                        text = it.reps.toString(),
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.weight(1f)
+                    )
+                    Spacer(Modifier.weight(0.2f))
+                    Text(
+                        text = it.weight.toString(),
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.weight(1f)
+                    )
                 }
+            }
 
             Row(
                 modifier = Modifier.fillMaxWidth()
@@ -226,7 +238,7 @@ fun RoutineScreenPreview() {
     }
 }
 
-@Preview(showBackground = true)
+//@Preview(showBackground = true)
 //@Composable
 //fun RoutineItemPreview() {
 //    AppTheme (dynamicColor = false){
@@ -254,17 +266,17 @@ fun RoutineScreenPreview() {
 //    }
 //}
 
-@Preview(showBackground = true)
-@Composable
-fun RoutineScreenBodyEmptyListPreview() {
-    AppTheme (dynamicColor = false) {
-        RoutineScreenBody(
-            routineList = listOf(),
-            onEditClick = {},
-            onDeleteClick = {},
-        )
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun RoutineScreenBodyEmptyListPreview() {
+//    AppTheme (dynamicColor = false) {
+//        RoutineScreenBody(
+//            routineList = listOf(),
+//            onEditClick = {},
+//            onDeleteClick = {},
+//        )
+//    }
+//}
 
 
 

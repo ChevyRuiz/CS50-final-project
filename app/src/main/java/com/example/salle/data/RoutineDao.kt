@@ -3,8 +3,12 @@ package com.example.salle.data
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import androidx.room.Transaction
 import com.example.salle.data.model.Exercise
 import com.example.salle.data.model.Routine
+import com.example.salle.data.model.RoutineWithExercises
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface RoutineDao {
@@ -14,4 +18,8 @@ interface RoutineDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(exercise: Exercise) : Long
+
+    @Transaction
+    @Query("SELECT * FROM routines")
+    fun getRoutinesWithExercises(): Flow<List<RoutineWithExercises>>
 }
