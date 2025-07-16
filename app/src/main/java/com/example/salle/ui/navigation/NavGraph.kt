@@ -10,7 +10,7 @@ import androidx.navigation.compose.navigation
 import com.example.salle.data.local.NestedGraph
 import com.example.salle.data.local.Pages
 import com.example.salle.ui.activity.ActivityScreen
-import com.example.salle.ui.routine.AddRoutineScreen
+import com.example.salle.ui.routine.RoutineEntryScreen
 import com.example.salle.ui.routine.RoutineScreen
 
 
@@ -34,7 +34,7 @@ fun SalleNavGraph(
                 )
             }
             composable(route = Pages.AddRoutines.name){
-                AddRoutineScreen(
+                RoutineEntryScreen(
                     onBackClick = { navController.popBackStack() },
                     modifier = Modifier.fillMaxSize()
                 )

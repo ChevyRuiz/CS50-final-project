@@ -5,8 +5,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.ViewModel
+import com.example.salle.data.model.Exercise
+import com.example.salle.data.model.Routine
+import com.example.salle.data.repositories.ExercisesRepository
+import com.example.salle.data.repositories.RoutinesRepository
 
-class AddRoutineViewModel : ViewModel() {
+class AddRoutineViewModel(
+    private val routinesRepository: RoutinesRepository,
+    private val exercisesRepository: ExercisesRepository,
+) : ViewModel() {
 
     var routineUiState by mutableStateOf(RoutineUiState())
         private set
@@ -23,11 +30,13 @@ class AddRoutineViewModel : ViewModel() {
 
     fun updateUiState(exerciseInfo: ExerciseInfo){
         val index = routineUiState.exercises.indexOfFirst { it.id == exerciseInfo.id }
-        val updatedList = routineUiState.exercises.toMutableList()
-        updatedList[index] = exerciseInfo
-        routineUiState = routineUiState.copy(
-            exercises = updatedList,
-        )
+        if (index != -1) {
+            val updatedList = routineUiState.exercises.toMutableList()
+            updatedList[index] = exerciseInfo
+            routineUiState = routineUiState.copy(
+                exercises = updatedList,
+            )
+        }
         routineUiState = routineUiState.copy(isEntryValid = validateInput())
     }
 
@@ -77,6 +86,16 @@ class AddRoutineViewModel : ViewModel() {
         }
     }
 
+    suspend fun saveRoutineAndExercises() {
+        if(validateInput()){
+            val routineId = routinesRepository.insertRoutine(routineUiState.toRoutine())
+
+            routineUiState.exercises.forEach {
+                exercisesRepository.insertExercise(it.toExercise(routineId = routineId))
+            }
+        }
+    }
+
 
 }
 
@@ -95,4 +114,16 @@ data class ExerciseInfo(
     val reps: String = "",
     val weight: String = "",
     val routineId: Int = 0,
+)
+
+fun RoutineUiState.toRoutine(): Routine = Routine(
+    name = routineName
+)
+
+fun ExerciseInfo.toExercise(routineId: Long): Exercise = Exercise(
+    name = name,
+    sets = sets.toIntOrNull() ?: 0,
+    reps = reps.toIntOrNull() ?: 0,
+    weight = weight.toIntOrNull() ?: 0,
+    routineId = routineId
 )

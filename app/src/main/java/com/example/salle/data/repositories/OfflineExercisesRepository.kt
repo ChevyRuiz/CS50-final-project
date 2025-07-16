@@ -1,4 +1,8 @@
 package com.example.salle.data.repositories
 
-class OfflineExercisesRepository : ExercisesRepository {
+import com.example.salle.data.RoutineDao
+import com.example.salle.data.model.Exercise
+
+class OfflineExercisesRepository(private val routineDao: RoutineDao) : ExercisesRepository {
+    override suspend fun insertExercise(exercise: Exercise) = routineDao.insert(exercise)
 }

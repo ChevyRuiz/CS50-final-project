@@ -10,7 +10,10 @@ import com.example.salle.ui.routine.AddRoutineViewModel
 object AppViewModelProvider {
     val Factory = viewModelFactory {
         initializer {
-            AddRoutineViewModel()
+            AddRoutineViewModel(
+                routinesRepository = salleApplication().container.routinesRepository,
+                exercisesRepository = salleApplication().container.exercisesRepository
+            )
         }
     }
 }

@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -26,23 +25,25 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.salle.R
 import com.example.salle.ui.AppViewModelProvider
-import com.example.salle.ui.theme.AppTheme
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddRoutineScreen(
+fun RoutineEntryScreen(
     onBackClick: () -> Unit,
     viewModel: AddRoutineViewModel = viewModel(factory = AppViewModelProvider.Factory),
     modifier: Modifier = Modifier,
 ) {
+    val coroutineScope = rememberCoroutineScope()
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -68,13 +69,18 @@ fun AddRoutineScreen(
         modifier = modifier
     ) {
         innerPadding ->
-        AddRoutineScreenBody(
+        RoutineEntryScreenBody(
             routineUiState = viewModel.routineUiState,
             onRoutineNameValueChange = {name -> viewModel.updateUiState(name) },
             onExerciceValueChange = {exerciceInfo -> viewModel.updateUiState(exerciceInfo) },
             onAddButtonClick = { viewModel.updateUiStateAddExercice() },
             onDeleteButtonClick = { viewModel.updateUiStateDeleteExercice() },
-            onSaveClick = onBackClick,
+            onSaveClick = {
+                coroutineScope.launch {
+                    viewModel.saveRoutineAndExercises()
+                    onBackClick()
+                }
+            },
             modifier = Modifier
                 .padding(
                     start = innerPadding.calculateStartPadding(LocalLayoutDirection.current),
@@ -88,7 +94,7 @@ fun AddRoutineScreen(
 }
 
 @Composable
-fun AddRoutineScreenBody(
+fun RoutineEntryScreenBody(
     routineUiState: RoutineUiState,
     onRoutineNameValueChange: (String) -> Unit,
     onExerciceValueChange: (ExerciseInfo) -> Unit,
