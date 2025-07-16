@@ -8,7 +8,7 @@ import com.example.salle.data.RoutineDao
 import com.example.salle.data.model.Exercise
 import com.example.salle.data.model.Routine
 
-@Database(entities = [Routine::class, Exercise::class], version = 1, exportSchema = false)
+@Database(entities = [Routine::class, Exercise::class], version = 2, exportSchema = false)
 abstract class SalleDatabase : RoomDatabase() {
     abstract fun routineDao(): RoutineDao
     companion object {
@@ -18,6 +18,7 @@ abstract class SalleDatabase : RoomDatabase() {
             // if the Instance is not null, return it, otherwise create a new database instance.
             return Instance ?: synchronized(this) {
                 Room.databaseBuilder(context, SalleDatabase::class.java, "salle_database")
+                    .fallbackToDestructiveMigration(true)
                     .build()
                     .also { Instance = it }
             }

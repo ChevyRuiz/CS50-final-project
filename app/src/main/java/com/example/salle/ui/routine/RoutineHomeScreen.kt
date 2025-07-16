@@ -29,11 +29,13 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.salle.data.model.RoutineWithExercises
 import com.example.salle.ui.AppViewModelProvider
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -43,6 +45,7 @@ fun RoutineScreen(
 ) {
 
     val routineHomeUiState by viewModel.routineHomeScreenUiState.collectAsState()
+    val coroutineScope = rememberCoroutineScope()
 
     Scaffold(
         topBar = {
@@ -60,7 +63,11 @@ fun RoutineScreen(
         RoutineScreenBody(
             routinesWithExercisesList = routineHomeUiState.routinesWithExercisesList,
             onEditClick = {},
-            onDeleteClick = {},
+            onDeleteClick = {
+                coroutineScope.launch {
+                    viewModel.deleteRoutineAndExercises(it)
+                }
+            },
             contentPadding = innerPadding,
             modifier = modifier.fillMaxSize(),
         )
@@ -71,7 +78,7 @@ fun RoutineScreen(
 fun RoutineScreenBody(
     routinesWithExercisesList: List<RoutineWithExercises>,
     onEditClick: (Routine) -> Unit,
-    onDeleteClick: (Routine) -> Unit,
+    onDeleteClick: (Int) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
 ){
@@ -103,7 +110,7 @@ fun RoutineScreenBody(
 fun RoutineList(
     routinesWithExercises: List<RoutineWithExercises>,
     onEditClick: (Routine) -> Unit,
-    onDeleteClick: (Routine) -> Unit,
+    onDeleteClick: (Int) -> Unit,
     contentPadding: PaddingValues,
     modifier: Modifier = Modifier
 ){
@@ -117,7 +124,7 @@ fun RoutineList(
                 modifier = Modifier
                     .padding(dimensionResource(id = R.dimen.padding_small)),
                 onEditClick = { onEditClick },
-                onDeleteClick = { onDeleteClick }
+                onDeleteClick = { onDeleteClick(routineWithExercises.routine.id) }
             )
         }
     }
@@ -127,7 +134,7 @@ fun RoutineList(
 fun RoutineWithExercisesItem(
     routineWithExercises: RoutineWithExercises,
     onEditClick: (Routine) -> Unit,
-    onDeleteClick: (Routine) -> Unit,
+    onDeleteClick: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -215,7 +222,7 @@ fun RoutineWithExercisesItem(
                 }
                 Spacer(Modifier.weight(0.1f))
                 FilledTonalButton(
-                    onClick = { onDeleteClick },
+                    onClick = { onDeleteClick(routineWithExercises.routine.id) },
                     shape = MaterialTheme.shapes.small,
                 ) {
                     Text(

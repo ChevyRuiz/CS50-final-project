@@ -19,6 +19,7 @@ object AppViewModelProvider {
 
         initializer {
             RoutineHomeScreenViewModel(
+                routinesRepository = salleApplication().container.routinesRepository,
                 routinesWithExercisesRepository = salleApplication().container.routinesWithExercisesRepository
             )
         }

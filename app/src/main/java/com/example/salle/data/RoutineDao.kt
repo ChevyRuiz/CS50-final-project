@@ -19,6 +19,9 @@ interface RoutineDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(exercise: Exercise) : Long
 
+    @Query("DELETE FROM routines WHERE id=:id")
+    suspend fun deleteRoutine(id: Int)
+
     @Transaction
     @Query("SELECT * FROM routines")
     fun getRoutinesWithExercises(): Flow<List<RoutineWithExercises>>
