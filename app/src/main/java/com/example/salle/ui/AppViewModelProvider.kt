@@ -1,11 +1,13 @@
 package com.example.salle.ui
 
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory
+import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.salle.SalleApplication
 import com.example.salle.ui.routine.AddRoutineViewModel
+import com.example.salle.ui.routine.RoutineEditViewModel
 import com.example.salle.ui.routine.RoutineHomeScreenViewModel
 
 object AppViewModelProvider {
@@ -21,6 +23,12 @@ object AppViewModelProvider {
             RoutineHomeScreenViewModel(
                 routinesRepository = salleApplication().container.routinesRepository,
                 routinesWithExercisesRepository = salleApplication().container.routinesWithExercisesRepository
+            )
+        }
+
+        initializer {
+            RoutineEditViewModel(
+                this.createSavedStateHandle(),
             )
         }
     }

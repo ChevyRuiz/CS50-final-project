@@ -41,6 +41,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun RoutineScreen(
     viewModel: RoutineHomeScreenViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    onEditClick: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
 
@@ -62,7 +63,7 @@ fun RoutineScreen(
     ) { innerPadding ->
         RoutineScreenBody(
             routinesWithExercisesList = routineHomeUiState.routinesWithExercisesList,
-            onEditClick = {},
+            onEditClick = onEditClick,
             onDeleteClick = {
                 coroutineScope.launch {
                     viewModel.deleteRoutineAndExercises(it)
@@ -77,7 +78,7 @@ fun RoutineScreen(
 @Composable
 fun RoutineScreenBody(
     routinesWithExercisesList: List<RoutineWithExercises>,
-    onEditClick: (Routine) -> Unit,
+    onEditClick: (Int) -> Unit,
     onDeleteClick: (Int) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
@@ -109,7 +110,7 @@ fun RoutineScreenBody(
 @Composable
 fun RoutineList(
     routinesWithExercises: List<RoutineWithExercises>,
-    onEditClick: (Routine) -> Unit,
+    onEditClick: (Int) -> Unit,
     onDeleteClick: (Int) -> Unit,
     contentPadding: PaddingValues,
     modifier: Modifier = Modifier
@@ -123,7 +124,7 @@ fun RoutineList(
                 routineWithExercises = routineWithExercises,
                 modifier = Modifier
                     .padding(dimensionResource(id = R.dimen.padding_small)),
-                onEditClick = { onEditClick },
+                onEditClick = onEditClick,
                 onDeleteClick = { onDeleteClick(routineWithExercises.routine.id) }
             )
         }
@@ -133,7 +134,7 @@ fun RoutineList(
 @Composable
 fun RoutineWithExercisesItem(
     routineWithExercises: RoutineWithExercises,
-    onEditClick: (Routine) -> Unit,
+    onEditClick: (Int) -> Unit,
     onDeleteClick: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -212,7 +213,7 @@ fun RoutineWithExercisesItem(
             ) {
                 Spacer(Modifier.weight(3f))
                 FilledTonalButton(
-                    onClick = { onEditClick },
+                    onClick = { onEditClick(routineWithExercises.routine.id) },
                     shape = MaterialTheme.shapes.small,
                 ) {
                     Text(
@@ -240,7 +241,8 @@ fun RoutineWithExercisesItem(
 fun RoutineScreenPreview() {
     AppTheme (dynamicColor = false){
         RoutineScreen(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize(),
+            onEditClick = {}
         )
     }
 }

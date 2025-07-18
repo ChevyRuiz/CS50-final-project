@@ -21,19 +21,25 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavDestination.Companion.hasRoute
+import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.salle.data.local.Pages
+import com.example.salle.ui.navigation.Activity
+import com.example.salle.ui.navigation.RoutineEntry
+import com.example.salle.ui.navigation.RoutineHome
 import com.example.salle.ui.navigation.SalleNavGraph
+import com.example.salle.ui.navigation.topLevelRoutes
 
 @Composable
 fun SalleApp(
-    // viewModel: SalleViewModel = viewModel(),
     navController: NavHostController = rememberNavController()
 ) {
-    // val salleUiState by viewModel.uiState.collectAsState()
     val layoutDirection = LocalLayoutDirection.current
+    val entry by navController.currentBackStackEntryAsState()
+    val currentDestination = entry?.destination
     Scaffold(
         bottomBar = {
                 BottomBar(
@@ -41,11 +47,8 @@ fun SalleApp(
                 )
         },
         floatingActionButton = {
-            if ((navController.currentBackStackEntryAsState().value?.destination?.route
-                    ?: Pages.Routines.name) == Pages.Routines.name
-            ) {
                 FloatingActionButton(
-                    onClick = { navController.navigate(Pages.AddRoutines.name) },
+                    onClick = { navController.navigate(RoutineEntry) },
                     shape = MaterialTheme.shapes.medium,
                     modifier = Modifier.padding(20.dp)
                 ) {
@@ -54,7 +57,6 @@ fun SalleApp(
                         contentDescription = "Add Routine"
                     )
                 }
-            }
         },
         modifier = Modifier
             .padding(
@@ -78,37 +80,65 @@ fun BottomBar(
     navController: NavHostController
 ) {
 
-    val backStackEntry by navController.currentBackStackEntryAsState()
-    val currentScreen = Pages.valueOf(
-        backStackEntry?.destination?.route ?: Pages.Routines.name)
+    NavigationBar(
+        windowInsets = NavigationBarDefaults.windowInsets, modifier = modifier
+    ) {
 
-
-    if(currentScreen.showsBottomBar){
-        NavigationBar(
-            windowInsets = NavigationBarDefaults.windowInsets,
-            modifier = modifier
-        ) {
-            Pages.entries.forEachIndexed { index, destination ->
-
-                if(destination.icon != null) {
-                    NavigationBarItem(
-                        selected = currentScreen.name == destination.name,
-                        onClick = {
-                            navController.navigate(route = destination.name)
-                        },
-                        icon = {
-                            Icon(
-                                destination.icon,
-                                contentDescription = destination.title
-                            )
-                        },
-                        label = { Text(destination.title) }
-                    )
+        val navBackStackEntry by navController.currentBackStackEntryAsState()
+        val currentDestination = navBackStackEntry?.destination
+        topLevelRoutes.forEach { topLevelRoute ->
+            NavigationBarItem(
+                icon = { Icon(topLevelRoute.icon, contentDescription = topLevelRoute.name) },
+                label = { Text(topLevelRoute.name) },
+                selected = currentDestination?.hierarchy?.any { it.hasRoute(topLevelRoute.route::class) } == true,
+                onClick = {
+                    navController.navigate(topLevelRoute.route) {
+                        // Pop up to the start destination of the graph to
+                        // avoid building up a large stack of destinations
+                        // on the back stack as users select items
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true
+                        }
+                        // Avoid multiple copies of the same destination when
+                        // reselecting the same item
+                        launchSingleTop = true
+                        // Restore state when reselecting a previously selected item
+                        restoreState = true
+                    }
                 }
-            }
+            )
         }
     }
 
 }
+
+
+//    if(currentScreen.showsBottomBar){
+//        NavigationBar(
+//            windowInsets = NavigationBarDefaults.windowInsets,
+//            modifier = modifier
+//        ) {
+//            Routes.entries.forEachIndexed { index, destination ->
+//
+//                if(destination.icon != null) {
+//                    NavigationBarItem(
+//                        selected = currentScreen.name == destination.name,
+//                        onClick = {
+//                            navController.navigate(route = destination.name)
+//                        },
+//                        icon = {
+//                            Icon(
+//                                destination.icon,
+//                                contentDescription = destination.title
+//                            )
+//                        },
+//                        label = { Text(destination.title) }
+//                    )
+//                }
+//            }
+//        }
+//    }
+
+
 
 

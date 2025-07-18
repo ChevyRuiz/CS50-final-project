@@ -7,9 +7,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
-import com.example.salle.data.local.NestedGraph
-import com.example.salle.data.local.Pages
 import com.example.salle.ui.activity.ActivityScreen
+import com.example.salle.ui.routine.RoutineEditScreen
 import com.example.salle.ui.routine.RoutineEntryScreen
 import com.example.salle.ui.routine.RoutineScreen
 
@@ -18,32 +17,41 @@ import com.example.salle.ui.routine.RoutineScreen
 fun SalleNavGraph(
     navController: NavHostController,
     modifier: Modifier
-){
+) {
     NavHost(
         navController = navController,
-        startDestination = NestedGraph.Nested.name,
+        startDestination = RoutinesNestedGraph,
         modifier = modifier
-    ){
-        navigation(
-            route = NestedGraph.Nested.name,
-            startDestination = Pages.Routines.name
-        ){
-            composable(route = Pages.Routines.name){
+    ) {
+        navigation<RoutinesNestedGraph>(startDestination = RoutineHome) {
+            composable<RoutineHome> {
                 RoutineScreen(
+                    onEditClick = { id ->
+                        navController.navigate(route = RoutineEdit(id))
+                    },
                     modifier = Modifier.fillMaxSize()
                 )
             }
-            composable(route = Pages.AddRoutines.name){
+            composable<RoutineEntry> {
                 RoutineEntryScreen(
                     onBackClick = { navController.popBackStack() },
                     modifier = Modifier.fillMaxSize()
                 )
             }
+
+            composable<RoutineEdit> {
+                RoutineEditScreen(
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
         }
-        composable(route = Pages.Activity.name) {
-            ActivityScreen(
-                modifier = Modifier.fillMaxSize()
-            )
+
+        navigation<ActivitiesNestedGraph>(startDestination = Activity){
+            composable<Activity> {
+                ActivityScreen(
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
         }
     }
 }
