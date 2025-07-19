@@ -29,6 +29,9 @@ object AppViewModelProvider {
         initializer {
             RoutineEditViewModel(
                 this.createSavedStateHandle(),
+                routinesWithExercisesRepository = salleApplication().container.routinesWithExercisesRepository,
+                routinesRepository = salleApplication().container.routinesRepository,
+                exercisesRepository = salleApplication().container.exercisesRepository
             )
         }
     }

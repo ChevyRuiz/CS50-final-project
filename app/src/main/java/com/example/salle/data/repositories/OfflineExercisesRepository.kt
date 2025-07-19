@@ -5,4 +5,5 @@ import com.example.salle.data.model.Exercise
 
 class OfflineExercisesRepository(private val routineDao: RoutineDao) : ExercisesRepository {
     override suspend fun insertExercise(exercise: Exercise) = routineDao.insert(exercise)
+    override suspend fun updateExercise(exercise: Exercise) = routineDao.updateExercise(exercise)
 }

@@ -127,3 +127,12 @@ fun ExerciseInfo.toExercise(routineId: Long): Exercise = Exercise(
     weight = weight.toIntOrNull() ?: 0,
     routineId = routineId
 )
+
+fun Exercise.toExerciseInfo(): ExerciseInfo = ExerciseInfo(
+    id = id,
+    name = name,
+    sets = sets.toString(),
+    reps = reps.toString(),
+    weight = weight.toString(),
+    routineId = routineId.toInt()
+)

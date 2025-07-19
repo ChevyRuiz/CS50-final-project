@@ -41,6 +41,7 @@ fun SalleNavGraph(
 
             composable<RoutineEdit> {
                 RoutineEditScreen(
+                    onBackClick = { navController.popBackStack() },
                     modifier = Modifier.fillMaxSize()
                 )
             }

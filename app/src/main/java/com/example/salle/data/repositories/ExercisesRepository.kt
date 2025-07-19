@@ -5,4 +5,5 @@ import com.example.salle.data.model.Routine
 
 interface ExercisesRepository {
     suspend fun insertExercise(exercise: Exercise) : Long
+    suspend fun updateExercise(exercise: Exercise)
 }

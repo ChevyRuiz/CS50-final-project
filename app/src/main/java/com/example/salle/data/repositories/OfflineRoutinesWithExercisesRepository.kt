@@ -6,4 +6,5 @@ import kotlinx.coroutines.flow.Flow
 
 class OfflineRoutinesWithExercisesRepository(private val routineDao: RoutineDao) : RoutinesWithExercisesRepository {
     override fun getRoutinesWithExercises(): Flow<List<RoutineWithExercises>> = routineDao.getRoutinesWithExercises()
+    override fun getRoutineWithExercises(id: Int): Flow<RoutineWithExercises> = routineDao.getRoutineWithExercises(id)
 }

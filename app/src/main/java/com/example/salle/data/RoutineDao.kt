@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
+import androidx.room.Update
 import com.example.salle.data.model.Exercise
 import com.example.salle.data.model.Routine
 import com.example.salle.data.model.RoutineWithExercises
@@ -25,4 +26,14 @@ interface RoutineDao {
     @Transaction
     @Query("SELECT * FROM routines")
     fun getRoutinesWithExercises(): Flow<List<RoutineWithExercises>>
+
+    @Transaction
+    @Query("SELECT * FROM routines WHERE id=:id")
+    fun getRoutineWithExercises(id: Int): Flow<RoutineWithExercises>
+
+    @Update
+    suspend fun updateRoutine(routine: Routine)
+
+    @Update
+    suspend fun updateExercise(exercise: Exercise)
 }
