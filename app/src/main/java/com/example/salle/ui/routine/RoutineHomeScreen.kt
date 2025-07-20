@@ -23,10 +23,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.salle.R
-import com.example.salle.data.model.Routine
 import com.example.salle.ui.theme.AppTheme
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
@@ -41,6 +44,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun RoutineScreen(
     viewModel: RoutineHomeScreenViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    onPlayClick: (Int) -> Unit,
     onEditClick: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -63,6 +67,7 @@ fun RoutineScreen(
     ) { innerPadding ->
         RoutineScreenBody(
             routinesWithExercisesList = routineHomeUiState.routinesWithExercisesList,
+            onPlayClick = onPlayClick,
             onEditClick = onEditClick,
             onDeleteClick = {
                 coroutineScope.launch {
@@ -78,6 +83,7 @@ fun RoutineScreen(
 @Composable
 fun RoutineScreenBody(
     routinesWithExercisesList: List<RoutineWithExercises>,
+    onPlayClick: (Int) -> Unit,
     onEditClick: (Int) -> Unit,
     onDeleteClick: (Int) -> Unit,
     modifier: Modifier = Modifier,
@@ -98,6 +104,7 @@ fun RoutineScreenBody(
         } else {
             RoutineList(
                 routinesWithExercises = routinesWithExercisesList,
+                onPlayClick = onPlayClick,
                 onEditClick = onEditClick,
                 onDeleteClick = onDeleteClick,
                 contentPadding = contentPadding,
@@ -110,6 +117,7 @@ fun RoutineScreenBody(
 @Composable
 fun RoutineList(
     routinesWithExercises: List<RoutineWithExercises>,
+    onPlayClick: (Int) -> Unit,
     onEditClick: (Int) -> Unit,
     onDeleteClick: (Int) -> Unit,
     contentPadding: PaddingValues,
@@ -124,6 +132,7 @@ fun RoutineList(
                 routineWithExercises = routineWithExercises,
                 modifier = Modifier
                     .padding(dimensionResource(id = R.dimen.padding_small)),
+                onPlayClick = onPlayClick,
                 onEditClick = onEditClick,
                 onDeleteClick = { onDeleteClick(routineWithExercises.routine.id) }
             )
@@ -134,6 +143,7 @@ fun RoutineList(
 @Composable
 fun RoutineWithExercisesItem(
     routineWithExercises: RoutineWithExercises,
+    onPlayClick: (Int) -> Unit,
     onEditClick: (Int) -> Unit,
     onDeleteClick: (Int) -> Unit,
     modifier: Modifier = Modifier
@@ -211,6 +221,15 @@ fun RoutineWithExercisesItem(
             Row(
                 modifier = Modifier.fillMaxWidth()
             ) {
+                IconButton(
+                    onClick = { onPlayClick(routineWithExercises.routine.id)},
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.PlayArrow,
+                        contentDescription = "Delete",
+                        tint = MaterialTheme.colorScheme.primary,
+                    )
+                }
                 Spacer(Modifier.weight(3f))
                 FilledTonalButton(
                     onClick = { onEditClick(routineWithExercises.routine.id) },
@@ -242,7 +261,8 @@ fun RoutineScreenPreview() {
     AppTheme (dynamicColor = false){
         RoutineScreen(
             modifier = Modifier.fillMaxSize(),
-            onEditClick = {}
+            onEditClick = {},
+            onPlayClick = {}
         )
     }
 }

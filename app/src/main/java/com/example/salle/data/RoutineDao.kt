@@ -7,6 +7,7 @@ import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
 import com.example.salle.data.model.Exercise
+import com.example.salle.data.model.History
 import com.example.salle.data.model.Routine
 import com.example.salle.data.model.RoutineWithExercises
 import kotlinx.coroutines.flow.Flow
@@ -19,6 +20,9 @@ interface RoutineDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(exercise: Exercise) : Long
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insert(history: History)
 
     @Query("DELETE FROM routines WHERE id=:id")
     suspend fun deleteRoutine(id: Int)

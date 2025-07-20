@@ -10,6 +10,7 @@ import androidx.navigation.compose.navigation
 import com.example.salle.ui.activity.ActivityScreen
 import com.example.salle.ui.routine.RoutineEditScreen
 import com.example.salle.ui.routine.RoutineEntryScreen
+import com.example.salle.ui.routine.RoutinePlayScreen
 import com.example.salle.ui.routine.RoutineScreen
 
 
@@ -26,6 +27,9 @@ fun SalleNavGraph(
         navigation<RoutinesNestedGraph>(startDestination = RoutineHome) {
             composable<RoutineHome> {
                 RoutineScreen(
+                    onPlayClick = { id ->
+                        navController.navigate(route = RoutinePlay(id))
+                    },
                     onEditClick = { id ->
                         navController.navigate(route = RoutineEdit(id))
                     },
@@ -41,6 +45,12 @@ fun SalleNavGraph(
 
             composable<RoutineEdit> {
                 RoutineEditScreen(
+                    onBackClick = { navController.popBackStack() },
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
+            composable<RoutinePlay> {
+                RoutinePlayScreen(
                     onBackClick = { navController.popBackStack() },
                     modifier = Modifier.fillMaxSize()
                 )

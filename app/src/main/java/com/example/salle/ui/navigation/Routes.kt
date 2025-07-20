@@ -23,6 +23,8 @@ object RoutineEntry
 @Serializable
 data class RoutineEdit(val id: Int)
 
+@Serializable
+data class RoutinePlay(val id: Int)
 // Nested Graph
 @Serializable object RoutinesNestedGraph
 @Serializable object ActivitiesNestedGraph

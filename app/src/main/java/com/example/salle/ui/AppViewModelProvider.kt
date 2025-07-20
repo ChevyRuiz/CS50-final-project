@@ -9,6 +9,7 @@ import com.example.salle.SalleApplication
 import com.example.salle.ui.routine.AddRoutineViewModel
 import com.example.salle.ui.routine.RoutineEditViewModel
 import com.example.salle.ui.routine.RoutineHomeScreenViewModel
+import com.example.salle.ui.routine.RoutinePlayViewModel
 
 object AppViewModelProvider {
     val Factory = viewModelFactory {
@@ -32,6 +33,14 @@ object AppViewModelProvider {
                 routinesWithExercisesRepository = salleApplication().container.routinesWithExercisesRepository,
                 routinesRepository = salleApplication().container.routinesRepository,
                 exercisesRepository = salleApplication().container.exercisesRepository
+            )
+        }
+
+        initializer {
+            RoutinePlayViewModel(
+                this.createSavedStateHandle(),
+                routinesWithExercisesRepository = salleApplication().container.routinesWithExercisesRepository,
+                historyRepository = salleApplication().container.historyRepository
             )
         }
     }

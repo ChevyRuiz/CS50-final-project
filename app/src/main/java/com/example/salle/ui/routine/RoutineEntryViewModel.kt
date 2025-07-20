@@ -78,9 +78,9 @@ class AddRoutineViewModel(
     private fun validateInput(uiState: RoutineUiState = routineUiState) : Boolean{
         return with(uiState) {
             routineName.isNotBlank() && routineName.length <= 25 && exercises.all {
-                it.name.isNotBlank() && it.name.length <= 25 && it.sets.isNotBlank() && it.sets.isDigitsOnly() && it.sets.length < 3 &&
+                it.name.isNotBlank() && it.name.length <= 25 && it.sets.isNotBlank() && it.sets.isDigitsOnly() && it.sets.length < 2 &&
                 it.reps.isNotBlank() && it.reps.isDigitsOnly() && it.reps.length < 3 &&
-                it.weight.isNotBlank() && it.weight.isDigitsOnly() && it.weight.length < 3
+                it.weight.isNotBlank() && it.weight.isDigitsOnly() && it.weight.length < 4
             }
 
         }
