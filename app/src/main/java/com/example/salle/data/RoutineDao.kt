@@ -35,6 +35,14 @@ interface RoutineDao {
     @Query("SELECT * FROM routines WHERE id=:id")
     fun getRoutineWithExercises(id: Int): Flow<RoutineWithExercises>
 
+    @Transaction
+    @Query("SELECT * FROM history ORDER BY id DESC")
+    fun getRoutinesWithDates() : Flow<List<History>>
+
+    @Transaction
+    @Query("SELECT * FROM history ORDER BY id DESC LIMIT 10")
+    fun getTenRoutinesWithDates() : Flow<List<History>>
+
     @Update
     suspend fun updateRoutine(routine: Routine)
 

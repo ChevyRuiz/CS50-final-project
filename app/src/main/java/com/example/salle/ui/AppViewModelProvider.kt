@@ -6,6 +6,7 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.salle.SalleApplication
+import com.example.salle.ui.activity.ActivityViewModel
 import com.example.salle.ui.routine.AddRoutineViewModel
 import com.example.salle.ui.routine.RoutineEditViewModel
 import com.example.salle.ui.routine.RoutineHomeScreenViewModel
@@ -41,6 +42,12 @@ object AppViewModelProvider {
                 this.createSavedStateHandle(),
                 routinesWithExercisesRepository = salleApplication().container.routinesWithExercisesRepository,
                 historyRepository = salleApplication().container.historyRepository
+            )
+        }
+
+        initializer {
+            ActivityViewModel(
+                salleApplication().container.historyRepository
             )
         }
     }
