@@ -1,5 +1,7 @@
 package com.example.salle.ui.navigation
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -14,6 +16,7 @@ import com.example.salle.ui.routine.RoutinePlayScreen
 import com.example.salle.ui.routine.RoutineScreen
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun SalleNavGraph(
     navController: NavHostController,

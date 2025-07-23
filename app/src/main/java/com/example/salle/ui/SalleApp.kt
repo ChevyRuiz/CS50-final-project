@@ -1,5 +1,7 @@
 package com.example.salle.ui
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.calculateEndPadding
@@ -33,6 +35,7 @@ import com.example.salle.ui.navigation.RoutineHome
 import com.example.salle.ui.navigation.SalleNavGraph
 import com.example.salle.ui.navigation.topLevelRoutes
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun SalleApp(
     navController: NavHostController = rememberNavController()
@@ -42,11 +45,14 @@ fun SalleApp(
     val currentDestination = entry?.destination
     Scaffold(
         bottomBar = {
+            if(currentDestination?.route == RoutineHome::class.qualifiedName || currentDestination?.route == Activity::class.qualifiedName) {
                 BottomBar(
                     navController = navController
                 )
+            }
         },
         floatingActionButton = {
+            if(currentDestination?.route == RoutineHome::class.qualifiedName){
                 FloatingActionButton(
                     onClick = { navController.navigate(RoutineEntry) },
                     shape = MaterialTheme.shapes.medium,
@@ -57,6 +63,7 @@ fun SalleApp(
                         contentDescription = "Add Routine"
                     )
                 }
+            }
         },
         modifier = Modifier
             .padding(

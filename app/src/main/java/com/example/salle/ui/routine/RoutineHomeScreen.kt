@@ -27,14 +27,20 @@ import com.example.salle.ui.theme.AppTheme
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.salle.data.model.RoutineWithExercises
 import com.example.salle.ui.AppViewModelProvider
@@ -218,6 +224,8 @@ fun RoutineWithExercisesItem(
                 }
             }
 
+            var deleteConfirmationRequired by rememberSaveable { mutableStateOf(false) }
+
             Row(
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -242,7 +250,7 @@ fun RoutineWithExercisesItem(
                 }
                 Spacer(Modifier.weight(0.1f))
                 FilledTonalButton(
-                    onClick = { onDeleteClick(routineWithExercises.routine.id) },
+                    onClick = { deleteConfirmationRequired = true },
                     shape = MaterialTheme.shapes.small,
                 ) {
                     Text(
@@ -251,9 +259,40 @@ fun RoutineWithExercisesItem(
                         color = Color.Red
                     )
                 }
+
+                if (deleteConfirmationRequired) {
+                    DeleteConfirmationDialog(
+                        onDeleteConfirm = {
+                            deleteConfirmationRequired = false
+                            onDeleteClick(routineWithExercises.routine.id)
+                        },
+                        onDeleteCancel = { deleteConfirmationRequired = false },
+                        modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_medium))
+                    )
+                }
             }
         }
     }
+}
+
+@Composable
+private fun DeleteConfirmationDialog(
+    onDeleteConfirm: () -> Unit, onDeleteCancel: () -> Unit, modifier: Modifier = Modifier
+) {
+    AlertDialog(onDismissRequest = { /* Do nothing */ },
+        title = { Text("Attention") },
+        text = { Text("Are you sure that you want to delete this routine?") },
+        modifier = modifier,
+        dismissButton = {
+            TextButton(onClick = onDeleteCancel) {
+                Text(text = "No")
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = onDeleteConfirm) {
+                Text("Yes")
+            }
+        })
 }
 @Preview(showBackground = true)
 @Composable
