@@ -93,7 +93,7 @@ fun ActivityScreenBody(daysCounter: Int, routinesAndDates: List<History>, modifi
                     modifier = Modifier.fillMaxWidth().padding(top = dimensionResource(R.dimen.padding_extra_large))
                 ) {
                     Text(
-                        text = "You have exercised on ${daysCounter} days in ${routinesAndDates.firstOrNull()?.timeStamp?.year ?: 0}",
+                        text = "You have exercised ${daysCounter} times in ${routinesAndDates.firstOrNull()?.timeStamp?.year ?: 0}",
                         style = MaterialTheme.typography.titleMedium,
                         textAlign = TextAlign.Center
                     )

@@ -206,7 +206,7 @@ fun ExerciceForm(
         OutlinedTextField(
             value = exerciceInfo.name,
             onValueChange = { onExerciceValueChange(exerciceInfo.copy(name = it)) },
-            label = { Text("Exercice") },
+            label = { Text("Exercise") },
             colors = OutlinedTextFieldDefaults.colors(
                 focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
                 unfocusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
